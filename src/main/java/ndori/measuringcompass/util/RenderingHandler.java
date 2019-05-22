@@ -55,8 +55,6 @@ public class RenderingHandler {
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GL11.glLineWidth(1.0F);
 
-            // Render C1
-
             if (boxes != null) {
                 // Draw stuff
                 for (BoundingBox aabb : boxes) {
@@ -77,12 +75,6 @@ public class RenderingHandler {
 
                         // Text
                         GL11.glEnable(GL11.GL_TEXTURE_2D);
-
-                        if (isC1Selected) {
-                            GL11.glPushMatrix();
-                            fontRenderer.drawString("Test text", mc.displayWidth / 2, mc.displayHeight / 2, 0xFFFFFFFF, true);
-                            GL11.glPopMatrix();
-                        }
 
                         int i = 0;
                         for (Vec3d edge : getEdges(aabb)) {
