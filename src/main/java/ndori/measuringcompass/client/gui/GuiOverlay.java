@@ -1,7 +1,7 @@
 package ndori.measuringcompass.client.gui;
 
 import ndori.measuringcompass.client.ClientInfo;
-import ndori.measuringcompass.util.RenderingHandler;
+import ndori.measuringcompass.client.Measure;
 import ndori.measuringcompass.util.WorldCoordinate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -17,11 +17,11 @@ public class GuiOverlay {
 
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
-        if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT && RenderingHandler.INSTANCE.isC1Selected) {
+        if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT && Measure.getSelectedBlock() != null) {
             EntityPlayer player = mc.player;
             BlockPos pl = new BlockPos(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().getEntityBoundingBox().minY, mc.getRenderViewEntity().posZ);
             WorldCoordinate playerCoordinate = new WorldCoordinate(pl, player.dimension);
-            String text = playerCoordinate.getCoordDistanceString(ClientInfo.c1Coordinate);
+            String text = playerCoordinate.getOffsetsString(Measure.getSelectedBlock());
             if (!text.isEmpty()) {
                 ScaledResolution res = new ScaledResolution(mc);
                 int w = res.getScaledWidth();

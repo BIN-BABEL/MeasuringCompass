@@ -1,10 +1,11 @@
 package ndori.measuringcompass.client.gui;
 
 import ndori.measuringcompass.client.ClientInfo;
-import ndori.measuringcompass.client.Measure;
 import ndori.measuringcompass.util.GuiButtonColored;
-import ndori.measuringcompass.util.RenderingHandler;
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLabel;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 
@@ -20,10 +21,10 @@ public class GuiMeasure extends GuiScreen {
     private GuiButton buttonDeleteLast;
     private GuiButton buttonClose;
 
+    private GuiTextField a;
     private GuiTextField r;
     private GuiTextField g;
     private GuiTextField b;
-    private GuiTextField a;
 
     private List<GuiTextField> colorList = new LinkedList<>();
     private List<GuiButtonColored> presetList = new LinkedList<>();
@@ -65,35 +66,35 @@ public class GuiMeasure extends GuiScreen {
         String mode = (ClientInfo.doFill) ? "Mode: Filled" : "Mode: Outline";
         buttonMode = this.addButton(new GuiButton(elementId.MODE.ordinal(), this.width / 2 - 100, this.height * 3 / 4 + 30, 95, 20, mode));
 
+        a = new GuiTextField(elementId.ALPHA.ordinal(), this.fontRenderer, this.width / 2 - 82, this.height / 2 - 10, 50, 20);
         r = new GuiTextField(elementId.RED.ordinal(), this.fontRenderer, this.width / 2 - 82, this.height / 2 - 100, 50, 20);
         g = new GuiTextField(elementId.GREEN.ordinal(), this.fontRenderer, this.width / 2 - 82, this.height / 2 - 70, 50, 20);
         b = new GuiTextField(elementId.BLUE.ordinal(), this.fontRenderer, this.width / 2 - 82, this.height / 2 - 40, 50, 20);
-        a = new GuiTextField(elementId.ALPHA.ordinal(), this.fontRenderer, this.width / 2 - 82, this.height / 2 - 10, 50, 20);
 
         colorList.add(r);
         colorList.add(g);
         colorList.add(b);
         colorList.add(a);
 
+        a.setText(String.valueOf(ClientInfo.currA));
         r.setText(String.valueOf(ClientInfo.currR));
         g.setText(String.valueOf(ClientInfo.currG));
         b.setText(String.valueOf(ClientInfo.currB));
-        a.setText(String.valueOf(ClientInfo.currA));
 
+        a.setMaxStringLength(3);
         r.setMaxStringLength(3);
         g.setMaxStringLength(3);
         b.setMaxStringLength(3);
-        a.setMaxStringLength(3);
 
+        GuiLabel labelAlpha = new GuiLabel(this.fontRenderer, elementId.A.ordinal(), this.width / 2 - 100, this.height / 2 - 10, 20, 20, 0xFFFFFF);
         GuiLabel labelRed = new GuiLabel(this.fontRenderer, elementId.R.ordinal(), this.width / 2 - 100, this.height / 2 - 100, 20, 20, 0xFFFFFF);
         GuiLabel labelGreen = new GuiLabel(this.fontRenderer, elementId.G.ordinal(), this.width / 2 - 100, this.height / 2 - 70, 20, 20, 0xFFFFFF);
         GuiLabel labelBlue = new GuiLabel(this.fontRenderer, elementId.B.ordinal(), this.width / 2 - 100, this.height / 2 - 40, 20, 20, 0xFFFFFF);
-        GuiLabel labelAlpha = new GuiLabel(this.fontRenderer, elementId.A.ordinal(), this.width / 2 - 100, this.height / 2 - 10, 20, 20, 0xFFFFFF);
 
+        labelAlpha.addLine("A :");
         labelRed.addLine("R :");
         labelGreen.addLine("G :");
         labelBlue.addLine("B :");
-        labelAlpha.addLine("A :");
 
         this.labelList.add(labelRed);
         this.labelList.add(labelGreen);
@@ -104,29 +105,16 @@ public class GuiMeasure extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if (button == buttonClear) {
-            ClientInfo.clearBoxes();
-            Measure.clearCoordData();
-            RenderingHandler.INSTANCE.isC1Selected = false;
+            ClientInfo.clearAll();
         } else if (button == buttonMode) {
             ClientInfo.doFill = !ClientInfo.doFill;
-            String mode = (ClientInfo.doFill) ? "Mode: Filled" : "Mode: Outline";
-            button.displayString = mode;
+            button.displayString = (ClientInfo.doFill) ? "Mode: Filled" : "Mode: Outline";
         } else if (button == buttonApply) {
             for (GuiTextField field : colorList) {
                 applyColor(field);
             }
-            /* Changes color of most recent box
-            BoundingBox box = ClientInfo.getLastBox();
-            if (box == null) return;
-            box.r = currR;
-            box.g = currG;
-            box.b = currB;
-            box.a = currA;
-             */
         } else if (button == buttonDeleteLast) {
-            ClientInfo.removeLast();
-            Measure.clearCoordData();
-            RenderingHandler.INSTANCE.isC1Selected = false;
+            ClientInfo.clearLast();
         } else if (button instanceof GuiButtonColored) {
             ((GuiButtonColored) button).setSelected(true);
             deselectButtonColored((GuiButtonColored) button);
@@ -140,14 +128,17 @@ public class GuiMeasure extends GuiScreen {
     }
 
     private void applyColor(GuiTextField field) {
-        if (field.getId() == elementId.RED.ordinal()) ClientInfo.currR = checkInput(field);
+        if (field.getId() == elementId.ALPHA.ordinal()) ClientInfo.currA = checkInput(field);
+        else if (field.getId() == elementId.RED.ordinal()) ClientInfo.currR = checkInput(field);
         else if (field.getId() == elementId.GREEN.ordinal()) ClientInfo.currG = checkInput(field);
         else if (field.getId() == elementId.BLUE.ordinal()) ClientInfo.currB = checkInput(field);
-        else if (field.getId() == elementId.ALPHA.ordinal()) ClientInfo.currA = checkInput(field);
     }
 
     private void applyColor(GuiTextField field, GuiButtonColored button) {
-        if (field.getId() == elementId.RED.ordinal()) {
+        if (field.getId() == elementId.ALPHA.ordinal()) {
+            field.setText(String.valueOf(button.a));
+            ClientInfo.currA = button.a;
+        } else if (field.getId() == elementId.RED.ordinal()) {
             field.setText(String.valueOf(button.r));
             ClientInfo.currR = button.r;
         } else if (field.getId() == elementId.GREEN.ordinal()) {
@@ -156,17 +147,12 @@ public class GuiMeasure extends GuiScreen {
         } else if (field.getId() == elementId.BLUE.ordinal()) {
             field.setText(String.valueOf(button.b));
             ClientInfo.currB = button.b;
-        } else if (field.getId() == elementId.ALPHA.ordinal()) {
-            field.setText(String.valueOf(button.a));
-            ClientInfo.currA = button.a;
         }
     }
 
     private void deselectButtonColored(GuiButtonColored button) {
         for (GuiButtonColored button2 : presetList) {
-            if (!button.equals(button2)) {
-                button2.setSelected(false);
-            }
+            if (!button.equals(button2)) button2.setSelected(false);
         }
     }
 
@@ -174,22 +160,20 @@ public class GuiMeasure extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
 
+        a.drawTextBox();
         r.drawTextBox();
         g.drawTextBox();
         b.drawTextBox();
-        a.drawTextBox();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (keyCode == 1)
-        {
+        if (keyCode == 1) {
             this.mc.displayGuiScreen(null);
 
-            if (this.mc.currentScreen == null)
-            {
+            if (this.mc.currentScreen == null) {
                 this.mc.setIngameFocus();
             }
             return;
@@ -221,9 +205,7 @@ public class GuiMeasure extends GuiScreen {
 
         StringBuilder stringBuilder = new StringBuilder();
         for (char c : field.getText().toCharArray()) {
-            if (Character.isDigit(c)) {
-                stringBuilder.append(c);
-            }
+            if (Character.isDigit(c)) stringBuilder.append(c);
         }
 
         int value = (stringBuilder.length() > 0) ? Integer.valueOf(stringBuilder.toString()) : 0;
@@ -243,14 +225,14 @@ public class GuiMeasure extends GuiScreen {
         CLEAR,
         MODE,
         APPLY,
+        ALPHA,
         RED,
         GREEN,
         BLUE,
-        ALPHA,
+        A,
         R,
         G,
         B,
-        A,
         DELETE,
         P1,
         P2,

@@ -25,7 +25,7 @@ public class ClientProxy {
     }
 
     public void init(FMLInitializationEvent event) {
-        RenderingHandler.init();
+        MinecraftForge.EVENT_BUS.register(new RenderingHandler());
         MinecraftForge.EVENT_BUS.register(new EventHandler());
         MinecraftForge.EVENT_BUS.register(new GuiOverlay());
     }

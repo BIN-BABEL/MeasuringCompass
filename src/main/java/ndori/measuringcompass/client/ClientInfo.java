@@ -3,7 +3,6 @@ package ndori.measuringcompass.client;
 import ndori.measuringcompass.ModConfig;
 import ndori.measuringcompass.util.BoundingBox;
 import ndori.measuringcompass.util.Logging;
-import ndori.measuringcompass.util.WorldCoordinate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -16,26 +15,22 @@ public class ClientInfo {
 
     public static Minecraft mc = Minecraft.getMinecraft();
 
-    public static Measure measurer = new Measure();
-
     public static boolean doFill = false;
 
-    public static WorldCoordinate c1Coordinate;
-
+    public static int currA = 255;
     public static int currR = 255;
     public static int currG = 255;
     public static int currB = 255;
-    public static int currA = 255;
 
     public static ItemStack measurerItem = GameRegistry.makeItemStack(ModConfig.itemRegistryName, 0, 1, null);
 
     private static List<BoundingBox> boxList = new LinkedList<>();
 
     public static void addBox(BoundingBox aabb) {
+        aabb.a = currA;
         aabb.r = currR;
         aabb.g = currG;
         aabb.b = currB;
-        aabb.a = currA;
 
         if (!boxList.isEmpty() && boxList.contains(aabb)) {
             Logging.message(mc.player, TextFormatting.RED + "Specified box already exists.");
@@ -54,7 +49,14 @@ public class ClientInfo {
         return boxList;
     }
 
-    public static void clearBoxes() {
+    public static void clearAll() {
         boxList.clear();
+        clearLast();
+        Measure.clearSelections();
+    }
+
+    public static void clearLast() {
+        removeLast();
+        Measure.clearSelections();
     }
 }

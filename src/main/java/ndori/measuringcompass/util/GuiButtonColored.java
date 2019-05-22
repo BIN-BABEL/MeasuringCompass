@@ -6,10 +6,10 @@ import net.minecraft.client.gui.GuiButton;
 public class GuiButtonColored extends GuiButton {
 
     private int color;
+    public int a;
     public int r;
     public int g;
     public int b;
-    public int a;
 
     private boolean isSelected;
 
@@ -34,9 +34,9 @@ public class GuiButtonColored extends GuiButton {
     }
 
     private void separateColors() {
+        this.a = color >> 24 & 255;
         this.r = color >> 16 & 255;
         this.g = color >> 8 & 255;
         this.b = color & 255;
-        this.a = color >> 24 & 255;
     }
 }
