@@ -1,0 +1,9 @@
+1.1:
+- Filled boxes now also render outlines (inversed color) to make it easier to see the shape
+- Added shortcut for deleting the most recent box (right-click while sneaking)
+- Now keeps track of which dimension the player is in
+- Added overlay when first corner is selected, showing XYZ offsets. This means the player's current position is NOT included in the numbers shown. If the offset says you're 15 blocks away, you're standing on the 16th block.
+- Minor bug fixes and optimizations
+
+1.0:
+- Initial release

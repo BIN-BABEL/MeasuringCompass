@@ -1,0 +1,16 @@
+[
+{
+  "modid": "measuringcompass",
+  "name": "Measuring Compass",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ndori"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
