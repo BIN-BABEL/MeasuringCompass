@@ -2,6 +2,7 @@ package ndori.measuringcompass.client.gui;
 
 import ndori.measuringcompass.client.ClientInfo;
 import ndori.measuringcompass.util.GuiButtonColored;
+import ndori.measuringcompass.util.RenderingHandler;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
@@ -63,7 +64,7 @@ public class GuiMeasure extends GuiScreen {
         buttonDeleteLast = this.addButton(new GuiButton(elementId.DELETE.ordinal(), this.width / 2 + 5, this.height * 3 / 4, 95, 20, "Delete Previous"));
         buttonClose = this.addButton(new GuiButton(elementId.CLOSE.ordinal(), this.width / 2 + 5, this.height * 3 / 4 + 30, 95, 20, "Close"));
 
-        String mode = (ClientInfo.doFill) ? "Mode: Filled" : "Mode: Outline";
+        String mode = (RenderingHandler.doFill) ? "Mode: Filled" : "Mode: Outline";
         buttonMode = this.addButton(new GuiButton(elementId.MODE.ordinal(), this.width / 2 - 100, this.height * 3 / 4 + 30, 95, 20, mode));
 
         a = new GuiTextField(elementId.ALPHA.ordinal(), this.fontRenderer, this.width / 2 - 82, this.height / 2 - 10, 50, 20);
@@ -107,8 +108,8 @@ public class GuiMeasure extends GuiScreen {
         if (button == buttonClear) {
             ClientInfo.clearAll();
         } else if (button == buttonMode) {
-            ClientInfo.doFill = !ClientInfo.doFill;
-            button.displayString = (ClientInfo.doFill) ? "Mode: Filled" : "Mode: Outline";
+            RenderingHandler.doFill = !RenderingHandler.doFill;
+            button.displayString = (RenderingHandler.doFill) ? "Mode: Filled" : "Mode: Outline";
         } else if (button == buttonApply) {
             for (GuiTextField field : colorList) {
                 applyColor(field);

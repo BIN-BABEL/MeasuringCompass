@@ -10,8 +10,6 @@ import net.minecraft.world.World;
 
 public class Measure {
 
-    private static final int MODE_C1 = 1;
-    private static final int MODE_C2 = 2;
     private static int mode = 1;
 
     private static BlockPos cornerBlock;
@@ -22,7 +20,7 @@ public class Measure {
     }
 
     public static void measure(EntityPlayer player, World worldIn, BlockPos pos) {
-        if (mode == MODE_C1) {
+        if (mode == 1) {
             selectedBlock = new WorldCoordinate(pos, worldIn.provider.getDimension());
             cornerBlock = pos;
             mode = 2;
@@ -30,7 +28,7 @@ public class Measure {
             // Start highlighting first corner and draw distance text on HUD
             ClientInfo.addBox(new BoundingBox(pos).setDimension(player.dimension));
 
-        } else if (mode == MODE_C2) {
+        } else if (mode == 2) {
 
             // Stop highlighting first corner
             if (selectedBlock != null) {

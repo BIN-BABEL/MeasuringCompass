@@ -24,6 +24,8 @@ public class RenderingHandler {
     private static RenderManager renderManager = mc.getRenderManager();
     private static FontRenderer fontRenderer = mc.fontRenderer;
 
+    public static boolean doFill = false;
+
     @SubscribeEvent
     public void onRenderWorldLastEvent(RenderWorldLastEvent event) {
         EntityPlayer player = mc.player;
@@ -51,7 +53,7 @@ public class RenderingHandler {
                 // Draw stuff
                 for (BoundingBox aabb : boxList) {
                     if (player.dimension == aabb.dimension) {
-                        if (ClientInfo.doFill && !player.getEntityBoundingBox().intersects(aabb)) {
+                        if (doFill && !player.getEntityBoundingBox().intersects(aabb)) {
                             float alpha = aabb.a/255f;
                             if (alpha > 0.5f) alpha = 0.5f;
                             RenderGlobal.renderFilledBox(aabb.grow(0.002D), aabb.r/255f, aabb.g/255f, aabb.b/255f, alpha);

@@ -15,8 +15,6 @@ public class ClientInfo {
 
     public static Minecraft mc = Minecraft.getMinecraft();
 
-    public static boolean doFill = false;
-
     public static int currA = 255;
     public static int currR = 255;
     public static int currG = 255;
