@@ -1,3 +1,9 @@
+1.1.1:
+- Fixed (sneak + rightclick) removing more than one box occasionally
+- Fixed offsets displaying even after selecting second corner
+- Fixed boxes drawing when selecting a corner and selecting the second in a different dimension
+- Refactored code
+
 1.1:
 - Filled boxes now also render outlines (inversed color) to make it easier to see the shape
 - Added shortcut for deleting the most recent box (right-click while sneaking)
