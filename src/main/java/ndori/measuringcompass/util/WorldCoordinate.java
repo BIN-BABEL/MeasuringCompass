@@ -1,7 +1,6 @@
 package ndori.measuringcompass.util;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 
 public class WorldCoordinate {
     private final BlockPos pos;
@@ -16,10 +15,6 @@ public class WorldCoordinate {
         return pos;
     }
 
-    public int getDimension() {
-        return dimension;
-    }
-
     public String getOffsetsString(WorldCoordinate other) {
         if (this.dimension != other.dimension) return "";
         BlockPos p1 = this.pos;
@@ -30,15 +25,8 @@ public class WorldCoordinate {
         return "X:" + dx + " Y:" + dy + " Z:" + dz;
     }
 
-    public double getDistanced(WorldCoordinate other) { // Euclidean distance
-        if (this.dimension == other.dimension) {
-            return posToVec3d(this.pos).distanceTo(posToVec3d(other.pos));
-        }
-        return -1;
-    }
-
-    private Vec3d posToVec3d(BlockPos pos) {
-        return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
+    public int getDimension() {
+        return dimension;
     }
 
     @Override
@@ -57,4 +45,19 @@ public class WorldCoordinate {
         result = 31 * result + dimension;
         return result;
     }
+
+    /*public int getDimension() {
+        return dimension;
+    }
+
+    public double getDistanced(WorldCoordinate other) { // Euclidean distance
+        if (this.dimension == other.dimension) {
+            return posToVec3d(this.pos).distanceTo(posToVec3d(other.pos));
+        }
+        return -1;
+    }
+
+    private Vec3d posToVec3d(BlockPos pos) {
+        return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
+    }*/
 }

@@ -1,8 +1,7 @@
 package ndori.measuringcompass.client.gui;
 
-import ndori.measuringcompass.client.ClientInfo;
-import ndori.measuringcompass.util.GuiButtonColored;
-import ndori.measuringcompass.util.RenderingHandler;
+import ndori.measuringcompass.MeasuringCompass;
+import ndori.measuringcompass.util.handler.RenderingHandler;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
@@ -77,10 +76,11 @@ public class GuiMeasure extends GuiScreen {
         colorList.add(b);
         colorList.add(a);
 
-        a.setText(String.valueOf(ClientInfo.currA));
-        r.setText(String.valueOf(ClientInfo.currR));
-        g.setText(String.valueOf(ClientInfo.currG));
-        b.setText(String.valueOf(ClientInfo.currB));
+        int[] colors = MeasuringCompass.instance.clientInfo.getColors();
+        a.setText(String.valueOf(colors[0]));
+        r.setText(String.valueOf(colors[1]));
+        g.setText(String.valueOf(colors[2]));
+        b.setText(String.valueOf(colors[3]));
 
         a.setMaxStringLength(3);
         r.setMaxStringLength(3);
@@ -106,7 +106,7 @@ public class GuiMeasure extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if (button == buttonClear) {
-            ClientInfo.clearAll();
+            MeasuringCompass.instance.clientInfo.clearAll();
         } else if (button == buttonMode) {
             RenderingHandler.doFill = !RenderingHandler.doFill;
             button.displayString = (RenderingHandler.doFill) ? "Mode: Filled" : "Mode: Outline";
@@ -115,7 +115,7 @@ public class GuiMeasure extends GuiScreen {
                 applyColor(field);
             }
         } else if (button == buttonDeleteLast) {
-            ClientInfo.clearLast();
+            MeasuringCompass.instance.clientInfo.clearLast();
         } else if (button instanceof GuiButtonColored) {
             ((GuiButtonColored) button).setSelected(true);
             deselectButtonColored((GuiButtonColored) button);
@@ -129,25 +129,25 @@ public class GuiMeasure extends GuiScreen {
     }
 
     private void applyColor(GuiTextField field) {
-        if (field.getId() == elementId.ALPHA.ordinal()) ClientInfo.currA = checkInput(field);
-        else if (field.getId() == elementId.RED.ordinal()) ClientInfo.currR = checkInput(field);
-        else if (field.getId() == elementId.GREEN.ordinal()) ClientInfo.currG = checkInput(field);
-        else if (field.getId() == elementId.BLUE.ordinal()) ClientInfo.currB = checkInput(field);
+        if (field.getId() == elementId.ALPHA.ordinal()) MeasuringCompass.instance.clientInfo.setAlpha(checkInput(field));
+        else if (field.getId() == elementId.RED.ordinal()) MeasuringCompass.instance.clientInfo.setRed(checkInput(field));
+        else if (field.getId() == elementId.GREEN.ordinal()) MeasuringCompass.instance.clientInfo.setGreen(checkInput(field));
+        else if (field.getId() == elementId.BLUE.ordinal()) MeasuringCompass.instance.clientInfo.setBlue(checkInput(field));
     }
 
     private void applyColor(GuiTextField field, GuiButtonColored button) {
         if (field.getId() == elementId.ALPHA.ordinal()) {
             field.setText(String.valueOf(button.a));
-            ClientInfo.currA = button.a;
+            MeasuringCompass.instance.clientInfo.setAlpha(button.a);
         } else if (field.getId() == elementId.RED.ordinal()) {
             field.setText(String.valueOf(button.r));
-            ClientInfo.currR = button.r;
+            MeasuringCompass.instance.clientInfo.setRed(button.r);
         } else if (field.getId() == elementId.GREEN.ordinal()) {
             field.setText(String.valueOf(button.g));
-            ClientInfo.currG = button.g;
+            MeasuringCompass.instance.clientInfo.setGreen(button.g);
         } else if (field.getId() == elementId.BLUE.ordinal()) {
             field.setText(String.valueOf(button.b));
-            ClientInfo.currB = button.b;
+            MeasuringCompass.instance.clientInfo.setBlue(button.b);
         }
     }
 

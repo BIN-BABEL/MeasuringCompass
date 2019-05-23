@@ -1,9 +1,9 @@
 package ndori.measuringcompass.client;
 
-import ndori.measuringcompass.ModConfig;
-import ndori.measuringcompass.client.gui.GuiOverlay;
-import ndori.measuringcompass.util.EventHandler;
-import ndori.measuringcompass.util.RenderingHandler;
+import ndori.measuringcompass.ConfigSetup;
+import ndori.measuringcompass.util.handler.UIOverlay;
+import ndori.measuringcompass.util.handler.EventHandler;
+import ndori.measuringcompass.util.handler.RenderingHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -21,13 +21,13 @@ public class ClientProxy {
     public void preInit(FMLPreInitializationEvent event) {
         File dir = event.getModConfigurationDirectory();
         config = new Configuration(new File(dir.getPath(), "measuringcompass.cfg"));
-        ModConfig.readConfig();
+        ConfigSetup.readConfig();
     }
 
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new RenderingHandler());
         MinecraftForge.EVENT_BUS.register(new EventHandler());
-        MinecraftForge.EVENT_BUS.register(new GuiOverlay());
+        MinecraftForge.EVENT_BUS.register(new UIOverlay());
     }
 
     public void postInit(FMLPostInitializationEvent event) {

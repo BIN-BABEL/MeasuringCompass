@@ -1,6 +1,6 @@
 package ndori.measuringcompass.util;
 
-import ndori.measuringcompass.client.ClientInfo;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -47,7 +47,7 @@ public class BoundingBox extends AxisAlignedBB {
         this.lengthZ = Math.abs(pos1.getZ() - pos2.getZ()) + 1;
     }
 
-    public BoundingBox(double x1, double y1, double z1, double x2, double y2, double z2) {
+    private BoundingBox(double x1, double y1, double z1, double x2, double y2, double z2) {
         super(x1, y1, z1, x2, y2, z2);
         this.a = 255;
         this.r = 255;
@@ -60,7 +60,7 @@ public class BoundingBox extends AxisAlignedBB {
     }
 
     public Vec3d[] nearestEdges() {
-        RenderManager renderManager = ClientInfo.mc.getRenderManager();
+        RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
         double x1 = this.minX;
         double x2 = this.maxX;
         double y1 = this.minY;

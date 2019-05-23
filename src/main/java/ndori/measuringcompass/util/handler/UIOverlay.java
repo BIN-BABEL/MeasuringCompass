@@ -1,6 +1,5 @@
-package ndori.measuringcompass.client.gui;
+package ndori.measuringcompass.util.handler;
 
-import ndori.measuringcompass.client.ClientInfo;
 import ndori.measuringcompass.client.Measure;
 import ndori.measuringcompass.util.WorldCoordinate;
 import net.minecraft.client.Minecraft;
@@ -11,8 +10,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class GuiOverlay {
-    private static Minecraft mc = ClientInfo.mc;
+public class UIOverlay {
+    private static Minecraft mc = Minecraft.getMinecraft();
     private static FontRenderer fontRenderer = mc.fontRenderer;
 
     @SubscribeEvent
@@ -28,11 +27,6 @@ public class GuiOverlay {
                 int h = res.getScaledHeight();
 
                 fontRenderer.drawStringWithShadow(text, w / 2 - fontRenderer.getStringWidth(text) / 2, h / 10 * 7, 0xFFFFFF);
-
-                //String.format("XYZ: %.3f / %.5f / %.3f",
-                // this.mc.getRenderViewEntity().posX,
-                // this.mc.getRenderViewEntity().getEntityBoundingBox().minY,
-                // this.mc.getRenderViewEntity().posZ)
             }
         }
     }

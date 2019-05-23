@@ -1,5 +1,6 @@
 package ndori.measuringcompass;
 
+import ndori.measuringcompass.client.ClientInfo;
 import ndori.measuringcompass.client.ClientProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -8,19 +9,21 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = MeasureMod.MODID,
-        name = MeasureMod.NAME,
-        version = MeasureMod.VERSION,
+@Mod(modid = MeasuringCompass.MODID,
+        name = MeasuringCompass.NAME,
+        version = MeasuringCompass.VERSION,
         clientSideOnly = true,
         dependencies = "required-after:forge@[14.23.5.2768,)")
 @Mod.EventBusSubscriber
-public class MeasureMod {
+public class MeasuringCompass {
     public static final String MODID = "measuringcompass";
     public static final String NAME = "Measuring Compass";
-    public static final String VERSION = "1.1";
+    public static final String VERSION = "1.1.1";
 
-    @Mod.Instance(MeasureMod.MODID)
-    public static MeasureMod instance;
+    public ClientInfo clientInfo = new ClientInfo();
+
+    @Mod.Instance(MeasuringCompass.MODID)
+    public static MeasuringCompass instance;
 
     public static Logger logger;
 
@@ -29,7 +32,7 @@ public class MeasureMod {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        MeasureMod.logger = event.getModLog();
+        MeasuringCompass.logger = event.getModLog();
         proxy.preInit(event);
     }
 

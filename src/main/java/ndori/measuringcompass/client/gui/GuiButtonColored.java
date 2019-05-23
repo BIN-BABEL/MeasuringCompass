@@ -1,4 +1,4 @@
-package ndori.measuringcompass.util;
+package ndori.measuringcompass.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -6,14 +6,14 @@ import net.minecraft.client.gui.GuiButton;
 public class GuiButtonColored extends GuiButton {
 
     private int color;
-    public int a;
-    public int r;
-    public int g;
-    public int b;
+    int a;
+    int r;
+    int g;
+    int b;
 
     private boolean isSelected;
 
-    public GuiButtonColored(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, int color) {
+    GuiButtonColored(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, int color) {
         super(buttonId, x, y, widthIn, heightIn, buttonText);
         this.color = color;
         this.isSelected = false;
@@ -29,7 +29,7 @@ public class GuiButtonColored extends GuiButton {
         drawRect(this.x + 2, this.y + 2, this.x + this.width - 2, this.y + this.height - 2, this.color);
     }
 
-    public void setSelected(boolean selected) {
+    void setSelected(boolean selected) {
         isSelected = selected;
     }
 

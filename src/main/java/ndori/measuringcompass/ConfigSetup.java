@@ -5,8 +5,8 @@ import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Level;
 
-@Config(modid = MeasureMod.MODID)
-public class ModConfig {
+@Config(modid = MeasuringCompass.MODID)
+public class ConfigSetup {
 
     @Config.Comment("Specify an item to use as a measuring tool (e.g., naturesaura:infused_iron_pickaxe)")
     public static String itemRegistryName = "minecraft:compass";
@@ -17,7 +17,7 @@ public class ModConfig {
             config.load();
             initConfig(config);
         } catch (Exception e) {
-            MeasureMod.logger.log(Level.ERROR, "There was a problem while loading the config file.", e);
+            MeasuringCompass.logger.log(Level.ERROR, "There was a problem while loading the config file.", e);
         } finally {
             if (config.hasChanged()) config.save();
         }

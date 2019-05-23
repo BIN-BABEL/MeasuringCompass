@@ -1,6 +1,7 @@
-package ndori.measuringcompass.util;
+package ndori.measuringcompass.util.handler;
 
-import ndori.measuringcompass.client.ClientInfo;
+import ndori.measuringcompass.MeasuringCompass;
+import ndori.measuringcompass.util.BoundingBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -20,7 +21,7 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class RenderingHandler {
 
-    private static Minecraft mc = ClientInfo.mc;
+    private static Minecraft mc = Minecraft.getMinecraft();
     private static RenderManager renderManager = mc.getRenderManager();
     private static FontRenderer fontRenderer = mc.fontRenderer;
 
@@ -31,9 +32,9 @@ public class RenderingHandler {
         EntityPlayer player = mc.player;
         ItemStack heldItem = player.getHeldItem(EnumHand.MAIN_HAND);
 
-        List<BoundingBox> boxList = ClientInfo.getBoxList();
+        List<BoundingBox> boxList = MeasuringCompass.instance.clientInfo.getBoxList();
 
-        if (!heldItem.isEmpty() && heldItem.isItemEqual(ClientInfo.measurerItem)) {
+        if (!heldItem.isEmpty() && heldItem.isItemEqual(MeasuringCompass.instance.clientInfo.getMeasurerItem())) {
             float partialTicks = event.getPartialTicks();
             double pX = mc.player.prevPosX + (mc.player.posX - mc.player.prevPosX) * partialTicks;
             double pY = mc.player.prevPosY + (mc.player.posY - mc.player.prevPosY) * partialTicks;
@@ -51,27 +52,27 @@ public class RenderingHandler {
                 GL11.glLineWidth(1.0F);
 
                 // Draw stuff
-                for (BoundingBox aabb : boxList) {
-                    if (player.dimension == aabb.dimension) {
-                        if (doFill && !player.getEntityBoundingBox().intersects(aabb)) {
-                            float alpha = aabb.a/255f;
+                for (BoundingBox bb : boxList) {
+                    if (player.dimension == bb.dimension) {
+                        if (doFill && !player.getEntityBoundingBox().intersects(bb)) {
+                            float alpha = bb.a/255f;
                             if (alpha > 0.5f) alpha = 0.5f;
-                            RenderGlobal.renderFilledBox(aabb.grow(0.002D), aabb.r/255f, aabb.g/255f, aabb.b/255f, alpha);
-                            RenderGlobal.drawSelectionBoundingBox(aabb.grow(0.002D), 1f - aabb.r/255f, 1f - aabb.g/255f, 1f - aabb.b/255f, aabb.a/255f);
+                            RenderGlobal.renderFilledBox(bb.grow(0.002D), bb.r/255f, bb.g/255f, bb.b/255f, alpha);
+                            RenderGlobal.drawSelectionBoundingBox(bb.grow(0.002D), 1f - bb.r/255f, 1f - bb.g/255f, 1f - bb.b/255f, bb.a/255f);
                         } else {
-                            RenderGlobal.drawSelectionBoundingBox(aabb.grow(0.002D), aabb.r/255f, aabb.g/255f, aabb.b/255f, aabb.a/255f);
+                            RenderGlobal.drawSelectionBoundingBox(bb.grow(0.002D), bb.r/255f, bb.g/255f, bb.b/255f, bb.a/255f);
                         }
 
-                        int x = (int) (aabb.maxX - aabb.minX);
-                        int y = (int) (aabb.maxY - aabb.minY);
-                        int z = (int) (aabb.maxZ - aabb.minZ);
+                        int x = (int) (bb.maxX - bb.minX);
+                        int y = (int) (bb.maxY - bb.minY);
+                        int z = (int) (bb.maxZ - bb.minZ);
                         int[] edgeLength = new int[]{x, y, z};
 
                         // Text
                         GL11.glEnable(GL11.GL_TEXTURE_2D);
 
                         int i = 0;
-                        for (Vec3d edge : aabb.nearestEdges()) {
+                        for (Vec3d edge : bb.nearestEdges()) {
                             GL11.glPushMatrix();
 
                             double offX = edge.x; // BlockPos coordinates for the middle of the edge
@@ -83,7 +84,7 @@ public class RenderingHandler {
                             GL11.glRotated(renderManager.playerViewX, 1.0, 0.0, 0.0);
                             GL11.glScaled(-0.04, -0.04, 0.04);
 
-                            fontRenderer.drawString(String.valueOf(edgeLength[i]), -fontRenderer.getStringWidth(String.valueOf(edgeLength[i])) / 2, 0, aabb.getColorInt(), true);
+                            fontRenderer.drawString(String.valueOf(edgeLength[i]), -fontRenderer.getStringWidth(String.valueOf(edgeLength[i])) / 2, 0, bb.getColorInt(), true);
 
                             GL11.glPopMatrix();
                             i++;

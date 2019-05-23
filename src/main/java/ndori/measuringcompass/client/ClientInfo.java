@@ -1,10 +1,10 @@
 package ndori.measuringcompass.client;
 
-import ndori.measuringcompass.ModConfig;
+import ndori.measuringcompass.ConfigSetup;
 import ndori.measuringcompass.util.BoundingBox;
-import ndori.measuringcompass.util.Logging;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -13,48 +13,70 @@ import java.util.List;
 
 public class ClientInfo {
 
-    public static Minecraft mc = Minecraft.getMinecraft();
+    private int alpha = 255;
+    private int red = 255;
+    private int green = 255;
+    private int blue = 255;
 
-    public static int currA = 255;
-    public static int currR = 255;
-    public static int currG = 255;
-    public static int currB = 255;
+    private ItemStack measurerItem = GameRegistry.makeItemStack(ConfigSetup.itemRegistryName, 0, 1, null);
 
-    public static ItemStack measurerItem = GameRegistry.makeItemStack(ModConfig.itemRegistryName, 0, 1, null);
+    private List<BoundingBox> boxList = new LinkedList<>();
 
-    private static List<BoundingBox> boxList = new LinkedList<>();
+    void addBox(BoundingBox bb) {
+        bb.a = alpha;
+        bb.r = red;
+        bb.g = green;
+        bb.b = blue;
 
-    public static void addBox(BoundingBox aabb) {
-        aabb.a = currA;
-        aabb.r = currR;
-        aabb.g = currG;
-        aabb.b = currB;
-
-        if (!boxList.isEmpty() && boxList.contains(aabb)) {
-            Logging.message(mc.player, TextFormatting.RED + "Specified box already exists.");
+        if (!boxList.isEmpty() && boxList.contains(bb)) {
+            Minecraft.getMinecraft().player.sendStatusMessage(new TextComponentString(TextFormatting.RED + "Specified box already exists."), false);
             return;
         }
 
-        boxList.add(aabb);
+        boxList.add(bb);
     }
 
-    public static void removeLast() {
+    void removeLast() {
         if (boxList.isEmpty()) return;
         boxList.remove(boxList.size() - 1);
     }
 
-    public static List<BoundingBox> getBoxList() {
+    public List<BoundingBox> getBoxList() {
         return boxList;
     }
 
-    public static void clearAll() {
+    public void clearAll() {
         boxList.clear();
         clearLast();
         Measure.clearSelections();
     }
 
-    public static void clearLast() {
+    public void clearLast() {
         removeLast();
         Measure.clearSelections();
+    }
+
+    public int[] getColors() {
+        return new int[]{alpha, red, green, blue};
+    }
+
+    public void setAlpha(int alpha) {
+        this.alpha = alpha;
+    }
+
+    public void setRed(int red) {
+        this.red = red;
+    }
+
+    public void setGreen(int green) {
+        this.green = green;
+    }
+
+    public void setBlue(int blue) {
+        this.blue = blue;
+    }
+
+    public ItemStack getMeasurerItem() {
+        return measurerItem;
     }
 }
